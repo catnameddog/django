@@ -3,9 +3,20 @@ import datetime
 from django.http import HttpResponse
 from django.views import generic
 from django.shortcuts import render
+from django.views.generic.dates import ArchiveIndexView, YearArchiveView
+from django.utils.encoding import force_str, force_text
 
-def year_index(request, year):
-    return HttpResponse("You're looking at entries for {year}".format(year=year))
+from cnd_blog.models import Post
+
+import logging
+
+logger = logging.getLogger('django')
+
+class PostYearArchiveView(YearArchiveView):
+    date_field = 'pub_date'
+    queryset = Post.objects.all()
+    make_object_list = True
+    allow_future = True
 
 def month_index(request, year, month):
     return HttpResponse("You're looking at entries for {year}-{month}".format(year=year, month=month))

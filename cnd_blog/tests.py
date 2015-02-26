@@ -16,12 +16,38 @@ def create_entry(title, pub_date):
     return Post(title_text=title, pub_date=pub_date, blog_content=lorem_ipsum)
 
 class EntryViewTests(TestCase):
+    def test_archive_view_with_no_blogs(self):
+        """
+        If no blog entries exist (ie, only during testing), we should return 404.
+        """
+        response = self.client.get(reverse('archive'))
+        self.assertEqual(response.status_code, 404)
+
+#    def test_archive_view_with_one_blog(self):
+#        """
+#        One blog entry should be displayed with a title.
+#        """
+#        post1 = create_entry(title="Test post 1", pub_date=datetime.date(2015,2,15))
+#        response = self.client.get(reverse('archive'))
+#        self.assertEqual(response.status_code, 200)
+#        self.assertContains(post1.title_text)
+
     def test_year_view_with_no_blogs(self):
         """
         If no blog entries exist, we should display a message.
         """
-        response = self.client.get(reverse('year_index', kwargs={"year": "2015"}))
+        response = self.client.get(reverse('post_year_archive', kwargs={"year": "2015"}))
+        self.assertEqual(response.status_code, 404)
+
+    def test_year_view_with_a_past_blog(self):
+        """
+        If a blog entry exists from the past in the requested year, it should be displayed.
+        """
+        post1 = create_entry(title="Test post 1", pub_date=datetime.date(2015,2,15))
+
+        response = self.client.get(reverse('post_year_archive', kwargs={"year": "2015"}))
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, post1.title_text)
        
     def test_month_view_with_no_blogs(self):
         """
