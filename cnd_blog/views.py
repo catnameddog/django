@@ -16,7 +16,6 @@ class PostYearArchiveView(YearArchiveView):
     date_field = 'pub_date'
     queryset = Post.objects.all()
     make_object_list = True
-    allow_future = True
 
 def month_index(request, year, month):
     return HttpResponse("You're looking at entries for {year}-{month}".format(year=year, month=month))
