@@ -6,23 +6,23 @@ from django.shortcuts import render
 from django.views.generic.dates import ArchiveIndexView, YearArchiveView
 from django.utils.encoding import force_str, force_text
 
-from cnd_blog.models import Post
+from cnd_blog.models import Article
 
 import logging
 
 logger = logging.getLogger('django')
 
-class PostYearArchiveView(YearArchiveView):
+class ArticleYearArchiveView(YearArchiveView):
     date_field = 'pub_date'
-    queryset = Post.objects.all()
+    queryset = Article.objects.all()
     make_object_list = True
 
-class PostMonthArchiveView(YearArchiveView):
+class ArticleMonthArchiveView(YearArchiveView):
     date_field = 'pub_date'
-    queryset = Post.objects.all()
+    queryset = Article.objects.all()
     make_object_list = True
 
-class PostDayArchiveView(YearArchiveView):
+class ArticleDayArchiveView(YearArchiveView):
     date_field = 'pub_date'
-    queryset = Post.objects.all()
+    queryset = Article.objects.all()
     make_object_list = True
