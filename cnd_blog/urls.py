@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url
 from django.views.generic.dates import ArchiveIndexView
 
 from cnd_blog import views
-from cnd_blog.views import PostYearArchiveView
+from cnd_blog.views import PostYearArchiveView, PostMonthArchiveView, PostDayArchiveView
 from cnd_blog.models import Post
 
 urlpatterns = patterns('',
@@ -11,8 +11,12 @@ urlpatterns = patterns('',
             name='archive'), 
         url(r'^(?P<year>\d{4})/$',
             PostYearArchiveView.as_view(),
-            name="post_year_archive"),
-        url(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/$', views.month_index, name='month_index'),
-        url(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/$', views.day_index, name='day_index'),
+            name='post_year_archive'),
+        url(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/$',
+            PostMonthArchiveView.as_view(),
+            name='post_month_archive'),
+        url(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/$',
+            PostDayArchiveView.as_view(),
+            name='post_day_archive'),
         )
 

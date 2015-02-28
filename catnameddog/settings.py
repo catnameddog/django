@@ -17,9 +17,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# NOTE: This is clearly not the secret key used in production. That's managed by salt.
 SECRET_KEY = 'kqix)pryy#+oh7h4-bfhyb4&*ho3#%cqx*h@_#xh9w8rn53xbz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# NOTE: Again... not actually the value used in production. That's managed by salt.
 DEBUG = True
 
 TEMPLATE_DEBUG = True

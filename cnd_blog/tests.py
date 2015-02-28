@@ -27,9 +27,19 @@ class EntryViewTests(TestCase):
         response = self.client.get(reverse('archive'))
         self.assertEqual(response.status_code, 404)
 
-    def test_archive_view_with_one_past_blog(self):
+    def test_archive_view_with_one_future_blog(self):
         """
-        One blog entry should be displayed with a title.
+        One future blog entry should not be displayed.
+        """
+        pub_date = timezone.now() + datetime.timedelta(days=30)
+        post1 = create_entry(title="Test post 1", pub_date=pub_date)
+
+        response = self.client.get(reverse('archive'))
+        self.assertEqual(response.status_code, 404)
+
+    def test_archive_view_with_a_past_blog(self):
+        """
+        One past blog entry should be displayed with a title.
         """
         pub_date = timezone.now() - datetime.timedelta(days=30)
         post1 = create_entry(title="Test post 1", pub_date=pub_date)
@@ -45,6 +55,16 @@ class EntryViewTests(TestCase):
         response = self.client.get(reverse('post_year_archive', kwargs={"year": "2015"}))
         self.assertEqual(response.status_code, 404)
 
+    def test_year_view_with_a_future_blog(self):
+        """
+        If a blog entry exists in the future, it should not be displayed.
+        """
+        pub_date = timezone.now() + datetime.timedelta(days=30)
+        post1 = create_entry(title="Test post 1", pub_date=pub_date)
+
+        response = self.client.get(reverse('post_year_archive', kwargs={"year": str(pub_date.year)}))
+        self.assertEqual(response.status_code, 404)
+       
     def test_year_view_with_a_past_blog(self):
         """
         If a blog entry exists from the past in the requested year, it should be displayed.
@@ -60,15 +80,61 @@ class EntryViewTests(TestCase):
         """
         If no blog entries exist, we should display a message.
         """
-        response = self.client.get(reverse('month_index', kwargs={"year": "2015",
-                                                                  "month": "2"}))
+        now = timezone.now()
+        response = self.client.get(reverse('post_month_archive', kwargs={"year": str(now.year),
+                                                                  "month": str(now.month)}))
+        self.assertEqual(response.status_code, 404)
+
+    def test_month_view_with_a_future_blog(self):
+        """
+        If a blog entry has a future date, it should not be displayed
+        """
+        pub_date = timezone.now() + datetime.timedelta(days=5)
+        post1 = create_entry(title="Test post 1", pub_date=pub_date)
+        response = self.client.get(reverse('post_month_archive', kwargs={"year": str(pub_date.year),
+                                                                  "month": str(pub_date.month)}))
+        self.assertEqual(response.status_code, 404)
+
+    def test_month_view_with_a_past_blog(self):
+        """
+        If a blog entry has a past date, it should be displayed
+        """
+        pub_date = timezone.now() - datetime.timedelta(days=5)
+        post1 = create_entry(title="Test post 1", pub_date=pub_date)
+        response = self.client.get(reverse('post_month_archive', kwargs={"year": str(pub_date.year),
+                                                                  "month": str(pub_date.month)}))
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, post1.title_text)
 
     def test_day_view_with_no_blogs(self):
         """
         If no blog entries exist, we should display a message.
         """
-        response = self.client.get(reverse('day_index', kwargs={"year": "2015",
-                                                                 "month": "2",
-                                                                 "day": "25"}))
+        now = timezone.now()
+        response = self.client.get(reverse('post_day_archive', kwargs={"year": str(now.year),
+                                                                 "month": str(now.month),
+                                                                 "day": str(now.day)}))
+        self.assertEqual(response.status_code, 404)
+
+    def test_day_view_with_a_future_blog(self):
+        """
+        If no blog entries exist, we should display a message.
+        """
+        pub_date = timezone.now() + datetime.timedelta(days=1)
+        post1 = create_entry(title="Test post 1", pub_date=pub_date)
+        response = self.client.get(reverse('post_day_archive', kwargs={"year": str(pub_date.year),
+                                                                 "month": str(pub_date.month),
+                                                                 "day": str(pub_date.day)}))
+        self.assertEqual(response.status_code, 404)
+
+    def test_day_view_with_a_past_blog(self):
+        """
+        If no blog entries exist, we should display a message.
+        """
+        pub_date = timezone.now() - datetime.timedelta(days=1)
+        post1 = create_entry(title="Test post 1", pub_date=pub_date)
+        response = self.client.get(reverse('post_day_archive', kwargs={"year": str(pub_date.year),
+                                                                 "month": str(pub_date.month),
+                                                                 "day": str(pub_date.day)}))
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, post1.title_text)
