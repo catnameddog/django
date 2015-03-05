@@ -1,0 +1,39 @@
+{% load staticfiles %}
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Cat Named D.O.G.</title>
+        <link href="{% static "css/styles.css" %}" type="text/css" rel="stylesheet" />
+    </head>
+    <body> 
+
+    <div class="header">
+        <div class "title">
+            <center><b>Cat Named D.O.G.</b><center>
+        </div>
+
+        <div class="nav_bar">
+            <center><nav>
+                Blog | Projects | About D.O.G. | About Me
+            </nav></center>
+        </div>
+    </div>
+
+    <div class="main">
+{% block content %}
+        <div class="blog_entry">
+            <div class="blog_title">Some blog title</div>
+            <div class="blog_pub_date"> Date Published: <time datetime="2015-02-15"> February 15th, 2015</time></div>
+            <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vel nisi sed sapien blandit tincidunt. Aliquam iaculis, risus sed fermentum semper, dolor diam luctus turpis, eget efficitur est magna eu diam. Nullam pulvinar augue non fringilla efficitur. Phasellus ut nisl tristique, ultrices quam nec, placerat justo. Duis placerat vestibulum tortor eu finibus. Aliquam consequat, arcu ac dignissim sodales, tortor enim fermentum tortor, nec pellentesque augue nisi eget diam. Cras sit amet libero at tellus luctus vestibulum. Donec consectetur leo quis dignissim pretium.
+            </p>
+        </div> 
+{% endblock %}
+    </div>
+
+    <div class="footer">
+
+    </div>
+    </body>
+</html>

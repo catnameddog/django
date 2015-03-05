@@ -1,8 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
 <div>
     <h1>All Articles</h1>
     {% for obj in object_list %}
+        <div class="blog_entry">
+            <div class="blog_title">{{ obj.title_text }}</div>
+            <div class="blog_pub_date">Date Published: {{ obj.pub_date|date:"F j, Y" }}</div>
         <p>
-            {{ obj.title_text }} - {{ obj.pub_date|date:"F j, Y" }}
+        {{ obj.blog_content }}
         </p>
     {% endfor %}
 </div>
+
+{% endblock %}

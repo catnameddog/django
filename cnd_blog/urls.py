@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.conf.urls import patterns, url
 from django.views.generic.dates import ArchiveIndexView
 
@@ -11,12 +13,11 @@ urlpatterns = patterns('',
             name='archive'), 
         url(r'^(?P<year>\d{4})/$',
             ArticleYearArchiveView.as_view(),
-            name='article_year_archive'),
+            name='article_year_archive'), 
         url(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/$',
             ArticleMonthArchiveView.as_view(),
             name='article_month_archive'),
         url(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/$',
             ArticleDayArchiveView.as_view(),
             name='article_day_archive'),
-        )
-
+        ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
